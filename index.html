@@ -3,62 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hey Anshul</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #f4f4f4;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav a {
-            margin: 0 1rem;
-            text-decoration: none;
-            color: #0077cc;
-        }
-        .content {
-            padding: 2rem;
-            max-width: 800px;
-            margin: auto;
-        }
-        footer {
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 1rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>Personal Brand</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Hey, I'm Anshul!</h1>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-        </nav>
+    <header class="hero">
+        <h1 id="site-title"></h1>
+        <p id="tagline"></p>
     </header>
-
-    <div class="content">
+    <nav>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <main>
         <section id="about">
-            <h2>About Me</h2>
-            <p>Welcome to my personal website. I'm building this space to share my projects and thoughts. Stay tuned for updates!</p>
+            <h2 id="about-heading"></h2>
+            <p id="about-text"></p>
         </section>
-
         <section id="contact">
-            <h2>Contact</h2>
-            <p>You can reach me at <a href="mailto:example@example.com">example@example.com</a>.</p>
+            <h2 id="contact-heading"></h2>
+            <p id="contact-email"></p>
         </section>
-    </div>
-
+    </main>
     <footer>
-        &copy; 2024 Anshul
+        <p id="copyright"></p>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>

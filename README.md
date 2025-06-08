@@ -1,5 +1,7 @@
 # Hey Anshul
 
-This repository contains the code for my personal website hosted on GitHub Pages at [www.heyanshul.in](https://www.heyanshul.in/).
+This repository contains the source for my personal brand website hosted at [www.heyanshul.in](https://www.heyanshul.in/).
 
-The site is a single static page built with HTML and a bit of inline CSS. Feel free to explore the code and adapt it for your own projects.
+The page is built with HTML, CSS, and a small amount of JavaScript. All text on the site is loaded from `data.json`, so you can update details such as the tagline or contact email without editing the code. Just modify the JSON file and reload the page.
+
+To view the site locally, open `index.html` in a browser. GitHub Pages automatically serves the page from the `main` branch.
