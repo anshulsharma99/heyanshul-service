@@ -1,5 +1,11 @@
 # Hey Anshul
 
-This repository contains the code for my personal website hosted on GitHub Pages at [www.heyanshul.in](https://www.heyanshul.in/).
+This repository contains a simple data-driven personal website for a software developer engineer in test.
 
-The site is a single static page built with HTML and a bit of inline CSS. Feel free to explore the code and adapt it for your own projects.
+The site is designed to look clean and minimal, similar to Apple's style. Blog posts are loaded dynamically from `posts.json` using JavaScript.
+
+## Adding a Blog Post
+
+1. Open `posts.json`.
+2. Add a new entry to the array with a `title`, `date`, and `content`.
+3. Commit and push your changes. The post will automatically appear on the site.
