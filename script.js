@@ -1,45 +1,71 @@
-const owner = 'heyanshul';
-const repo = 'heyanshul-service';
-const branch = 'main';
 const rootPath = 'blogs';
 
-async function fetchTree() {
+async function init() {
   try {
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
-    const resp = await fetch(apiUrl);
-    const data = await resp.json();
-    const entries = data.tree.filter(item =>
-      item.type === 'blob' &&
-      item.path.startsWith(rootPath + '/') &&
-      (item.path.endsWith('.md') || item.path.endsWith('.txt'))
-    );
-
-    const tree = {};
-    for (const entry of entries) {
-      const relative = entry.path.slice(rootPath.length + 1);
-      const parts = relative.split('/');
-      let current = tree;
-      for (let i = 0; i < parts.length; i++) {
-        if (i === parts.length - 1) {
-          current.__file = entry;
-        } else {
-          const part = parts[i];
-          current[part] = current[part] || {};
-          current = current[part];
-        }
-      }
+    let tree = window.blogIndex;
+    if (!tree) {
+      const resp = await fetch('blog-index.json');
+      tree = await resp.json();
     }
 
-    const container = document.getElementById('posts');
-    buildList(container, tree);
+    const treeContainer = document.getElementById('tree');
+    if (treeContainer) {
+      buildTree(treeContainer, tree);
+    }
+
+    const listContainer = document.getElementById('posts');
+    if (listContainer) {
+      buildList(listContainer, tree);
+    }
   } catch (err) {
     console.error('Error loading posts:', err);
-    document.getElementById('posts').innerText = 'Failed to load blog posts.';
+    const treeContainer = document.getElementById('tree');
+    const listContainer = document.getElementById('posts');
+    if (treeContainer) treeContainer.innerText = 'Failed to load blog posts.';
+    if (listContainer) listContainer.innerText = 'Failed to load blog posts.';
   }
 }
 
+function buildTree(parent, node) {
+  const keys = Object.keys(node).filter(k => k !== '__file').sort();
+  const ul = document.createElement('ul');
+  parent.appendChild(ul);
+
+  for (const key of keys) {
+    const child = node[key];
+    const li = document.createElement('li');
+
+    if (child.__file && Object.keys(child).length === 1) {
+      li.classList.add('file');
+      const link = document.createElement('a');
+      link.href = '#';
+      link.textContent = key;
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        loadPost(child.__file);
+      });
+      li.appendChild(link);
+    } else {
+      li.classList.add('folder');
+      const span = document.createElement('span');
+      span.textContent = key;
+      li.appendChild(span);
+      const nested = buildTree(li, child);
+      nested.style.display = 'none';
+      span.addEventListener('click', () => {
+        const isHidden = nested.style.display === 'none';
+        nested.style.display = isHidden ? 'block' : 'none';
+        li.classList.toggle('open', isHidden);
+      });
+    }
+    ul.appendChild(li);
+  }
+
+  return ul;
+}
+
 function buildList(parent, node) {
-  const keys = Object.keys(node).filter(k => k !== '__file');
+  const keys = Object.keys(node).filter(k => k !== '__file').sort();
   const ul = document.createElement('ul');
   parent.appendChild(ul);
 
@@ -53,40 +79,25 @@ function buildList(parent, node) {
       link.textContent = key;
       link.addEventListener('click', e => {
         e.preventDefault();
-        loadPost(child.__file.url);
+        loadPost(child.__file);
       });
       li.appendChild(link);
     } else {
-      if (child.__file) {
-        const link = document.createElement('a');
-        link.href = '#';
-        link.textContent = key;
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          loadPost(child.__file.url);
-        });
-        li.appendChild(link);
-      } else {
-        li.textContent = key;
-      }
+      li.textContent = key;
       buildList(li, child);
     }
     ul.appendChild(li);
   }
+
+  return ul;
 }
 
-async function loadPost(url) {
-  const resp = await fetch(url);
-  const data = await resp.json();
-  let text = '';
-  if (data.encoding === 'base64') {
-    text = atob(data.content);
-  } else {
-    text = data.content;
-  }
+async function loadPost(path) {
+  const resp = await fetch(`${rootPath}/${path}`);
+  const text = await resp.text();
   const content = document.getElementById('post-content');
   content.innerHTML = window.marked ? marked.parse(text) : `<pre>${text}</pre>`;
   content.scrollIntoView({ behavior: 'smooth' });
 }
 
-document.addEventListener('DOMContentLoaded', fetchTree);
+document.addEventListener('DOMContentLoaded', init);
