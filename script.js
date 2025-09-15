@@ -1,35 +1,9 @@
-const owner = 'heyanshul';
-const repo = 'heyanshul-service';
-const branch = 'main';
 const rootPath = 'blogs';
 
 async function fetchTree() {
   try {
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
-    const resp = await fetch(apiUrl);
-    const data = await resp.json();
-    const entries = data.tree.filter(item =>
-      item.type === 'blob' &&
-      item.path.startsWith(rootPath + '/') &&
-      (item.path.endsWith('.md') || item.path.endsWith('.txt'))
-    );
-
-    const tree = {};
-    for (const entry of entries) {
-      const relative = entry.path.slice(rootPath.length + 1);
-      const parts = relative.split('/');
-      let current = tree;
-      for (let i = 0; i < parts.length; i++) {
-        if (i === parts.length - 1) {
-          current.__file = entry;
-        } else {
-          const part = parts[i];
-          current[part] = current[part] || {};
-          current = current[part];
-        }
-      }
-    }
-
+    const resp = await fetch('blog-index.json');
+    const tree = await resp.json();
     const container = document.getElementById('posts');
     buildList(container, tree);
   } catch (err) {
@@ -53,7 +27,7 @@ function buildList(parent, node) {
       link.textContent = key;
       link.addEventListener('click', e => {
         e.preventDefault();
-        loadPost(child.__file.url);
+        loadPost(child.__file);
       });
       li.appendChild(link);
     } else {
@@ -63,7 +37,7 @@ function buildList(parent, node) {
         link.textContent = key;
         link.addEventListener('click', e => {
           e.preventDefault();
-          loadPost(child.__file.url);
+          loadPost(child.__file);
         });
         li.appendChild(link);
       } else {
@@ -75,15 +49,9 @@ function buildList(parent, node) {
   }
 }
 
-async function loadPost(url) {
-  const resp = await fetch(url);
-  const data = await resp.json();
-  let text = '';
-  if (data.encoding === 'base64') {
-    text = atob(data.content);
-  } else {
-    text = data.content;
-  }
+async function loadPost(path) {
+  const resp = await fetch(`${rootPath}/${path}`);
+  const text = await resp.text();
   const content = document.getElementById('post-content');
   content.innerHTML = window.marked ? marked.parse(text) : `<pre>${text}</pre>`;
   content.scrollIntoView({ behavior: 'smooth' });
