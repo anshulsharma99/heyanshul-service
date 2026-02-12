@@ -1,3 +1,5 @@
-# AI Introduction
+# AI Foundations in Plain Language
 
-This is a dummy blog post about AI fundamentals.
+AI systems map patterns from data to predictions or generated outputs.
+
+Useful intuition: models are probabilistic assistants, not deterministic source-of-truth engines.
