@@ -12,6 +12,7 @@
       --text: #132238;
       --muted: #516179;
       --brand: #3459e6;
+      --sidebar-width: min(88vw, 320px);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -28,7 +29,10 @@
     .bar, .pane { background: var(--surface); border-radius: 14px; border: 1px solid color-mix(in oklab, var(--surface), var(--text) 15%); }
     .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; margin-bottom: 14px; }
     .bar a { color: var(--brand); text-decoration: none; }
+    .menu-btn { border: 1px solid color-mix(in oklab, var(--surface), var(--text) 24%); border-radius: 10px; background: transparent; color: inherit; padding: 6px 10px; font: inherit; cursor: pointer; display: none; }
+    .menu-btn:hover { border-color: var(--brand); }
     .layout { display: grid; gap: 14px; grid-template-columns: 320px 1fr; }
+    .sidebar { position: relative; }
     .pane { padding: 14px; min-height: 76vh; }
     .controls { display: grid; gap: 10px; margin-bottom: 14px; }
     label[for='search'] { font-weight: 600; }
@@ -42,12 +46,33 @@
     #post-content pre { background: color-mix(in oklab, var(--surface), black 7%); padding: 12px; border-radius: 8px; overflow: auto; }
     #post-content blockquote { border-left: 4px solid var(--brand); margin: 16px 0; padding-left: 12px; color: var(--muted); }
     .empty { color: var(--muted); }
+    .backdrop { display: none; }
     @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .pane { min-height: 0; } }
     @media (max-width: 640px) {
-      .shell { padding: 14px 10px 24px; }
-      .bar { padding: 12px; flex-direction: column; align-items: flex-start; }
-      .bar a { display: inline-block; padding: 4px 0; }
-      .pane { padding: 12px; }
+      .shell { padding: 12px 8px 20px; }
+      .bar { padding: 12px; align-items: center; }
+      .bar strong { flex: 1; }
+      .menu-btn { display: inline-block; }
+      .layout { display: block; }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 30;
+        width: var(--sidebar-width);
+        height: 100vh;
+        max-height: 100vh;
+        margin: 0;
+        border-radius: 0 14px 14px 0;
+        transform: translateX(-104%);
+        transition: transform 0.24s ease;
+        overflow: auto;
+      }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+      .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.42); z-index: 20; }
+      body.sidebar-open .backdrop { display: block; }
+      .pane { padding: 12px; min-height: 0; }
+      .content-pane { min-height: calc(100vh - 92px); }
       .tree ul { padding-left: 10px; }
       #post-content { overflow-wrap: anywhere; }
       #post-content pre { font-size: 0.9rem; }
@@ -58,11 +83,12 @@
   <div class="shell">
     <header class="bar">
       <strong>Blog Explorer</strong>
+      <button id="menu-toggle" class="menu-btn" type="button" aria-expanded="false" aria-controls="posts">☰ Files</button>
       <a href="index.html">← Home</a>
     </header>
 
     <main class="layout">
-      <aside class="pane" aria-label="Post navigation">
+      <aside class="pane sidebar" id="sidebar" aria-label="Post navigation">
         <div class="controls">
           <label for="search">Search posts</label>
           <input id="search" type="search" placeholder="Type title, category, or filename" />
@@ -70,11 +96,12 @@
         <nav id="posts" class="tree" aria-live="polite"></nav>
       </aside>
 
-      <article class="pane">
+      <article class="pane content-pane">
         <div id="post-meta" class="crumbs">Select a post from the left.</div>
         <div id="post-content" class="empty">No post selected yet.</div>
       </article>
     </main>
+    <div id="nav-backdrop" class="backdrop"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

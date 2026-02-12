@@ -3,6 +3,7 @@ const ROOT_PATH = 'blogs';
 const state = {
   index: null,
   posts: [],
+  sidebarOpen: false,
 };
 
 const dom = {
@@ -10,6 +11,9 @@ const dom = {
   content: document.getElementById('post-content'),
   meta: document.getElementById('post-meta'),
   search: document.getElementById('search'),
+  menuToggle: document.getElementById('menu-toggle'),
+  sidebar: document.getElementById('sidebar'),
+  backdrop: document.getElementById('nav-backdrop'),
 };
 
 function collectPosts(node, trail = []) {
@@ -83,6 +87,25 @@ function renderTree(node, parent, filter = '') {
   }
 }
 
+
+function isMobile() {
+  return window.matchMedia('(max-width: 640px)').matches;
+}
+
+function setSidebarOpen(open) {
+  state.sidebarOpen = open;
+  document.body.classList.toggle('sidebar-open', open);
+  if (dom.menuToggle) {
+    dom.menuToggle.setAttribute('aria-expanded', String(open));
+  }
+}
+
+function closeSidebarOnMobile() {
+  if (isMobile()) {
+    setSidebarOpen(false);
+  }
+}
+
 async function loadPost(path, title = path, summary = '', localTrail = []) {
   const response = await fetch(`${ROOT_PATH}/${path}`);
   if (!response.ok) {
@@ -96,6 +119,7 @@ async function loadPost(path, title = path, summary = '', localTrail = []) {
   const trail = localTrail.length > 0 ? localTrail.join(' / ') : path;
   dom.meta.textContent = `${trail}${summary ? ` · ${summary}` : ''}`;
   history.replaceState(null, '', `#${encodeURIComponent(path)}`);
+  closeSidebarOnMobile();
 }
 
 function findPostByPath(path) {
@@ -130,6 +154,17 @@ async function init() {
     }
 
     dom.search?.addEventListener('input', (event) => render(event.target.value));
+    dom.menuToggle?.addEventListener('click', () => setSidebarOpen(!state.sidebarOpen));
+    dom.backdrop?.addEventListener('click', () => setSidebarOpen(false));
+
+    const syncSidebar = () => {
+      if (!isMobile()) {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', syncSidebar);
+    syncSidebar();
   } catch (error) {
     console.error(error);
     dom.nav.innerHTML = '<p class="empty">Failed to load blog index.</p>';
