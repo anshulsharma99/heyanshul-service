@@ -1,4 +1,9 @@
 {
+  "dummy-blog": {
+    "__file": "dummy-blog.md",
+    "title": "Dummy Blog: Hello Structure",
+    "summary": "This is a placeholder blog post to verify that root-level markdown files inside `blogs/` are rendered on the website."
+  },
   "life": {
     "travel": {
       "asia": {
