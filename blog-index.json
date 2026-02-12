@@ -4,50 +4,68 @@
       "asia": {
         "japan": {
           "guide": {
-            "__file": "life/travel/asia/japan/guide.md"
+            "__file": "life/travel/asia/japan/guide.md",
+            "title": "Japan Guide: A Compact First Trip Plan",
+            "summary": "Tokyo for variety, Kyoto for calm, and Osaka for food is a balanced first itinerary."
           }
         }
       },
       "tips": {
-        "__file": "life/travel/tips.md"
+        "__file": "life/travel/tips.md",
+        "title": "Travel Notes for Engineers",
+        "summary": "Treat trip planning like release planning: identify constraints, define must-haves, and leave room for iteration."
       }
     }
   },
   "tech": {
     "ai": {
       "future": {
-        "__file": "tech/ai/future.md"
+        "__file": "tech/ai/future.md",
+        "title": "The Near Future of AI Tooling",
+        "summary": "The most useful AI trend is tighter integration into existing developer workflows."
       },
       "intro": {
-        "__file": "tech/ai/intro.md"
+        "__file": "tech/ai/intro.md",
+        "title": "AI Foundations in Plain Language",
+        "summary": "AI systems map patterns from data to predictions or generated outputs."
       }
     },
     "programming": {
       "javascript": {
         "basics": {
-          "__file": "tech/programming/javascript/basics.md"
+          "__file": "tech/programming/javascript/basics.md",
+          "title": "JavaScript Basics Revisited",
+          "summary": "Modern JavaScript is easiest to learn by mastering scope, async flow, and data transformations."
         }
       },
       "python": {
         "getting-started": {
-          "__file": "tech/programming/python/getting-started.md"
+          "__file": "tech/programming/python/getting-started.md",
+          "title": "Python Getting Started, the Practical Way",
+          "summary": "Set up a virtual environment first, then build tiny scripts with clear input/output behavior."
         }
       },
       "readme": {
-        "__file": "tech/programming/readme.md"
+        "__file": "tech/programming/readme.md",
+        "title": "Programming Index",
+        "summary": "This section collects practical programming notes that can be read independently."
       }
     }
   },
   "testing": {
     "tips": {
       "post": {
-        "__file": "testing/tips/post.md"
+        "__file": "testing/tips/post.md",
+        "title": "Testing Tips That Scale",
+        "summary": "Start with reliable test data, then optimize for deterministic assertions."
       }
     }
   },
   "welcome": {
     "post": {
-      "__file": "welcome/post.md"
+      "__file": "welcome/post.md",
+      "title": "Welcome: Why I Rebuilt This Site",
+      "summary": "I rewrote this blog from scratch to keep it simple, fast, and maintainable."
     }
   }
 }

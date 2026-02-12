@@ -1,3 +1,5 @@
-# Welcome to My Blog
+# Welcome: Why I Rebuilt This Site
 
-This is my first post where I share why I started writing about testing and development.
+I rewrote this blog from scratch to keep it simple, fast, and maintainable.
+
+The new version focuses on clean navigation, searchable content, and straightforward Markdown authoring.
