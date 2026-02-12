@@ -40,6 +40,7 @@
       box-shadow: 0 10px 32px -24px #000;
     }
     header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    nav { display: flex; flex-wrap: wrap; justify-content: flex-end; row-gap: 6px; }
     nav a { color: var(--muted); text-decoration: none; margin-left: 14px; }
     nav a:hover, nav a:focus-visible { color: var(--brand); }
     .hero { margin-top: 14px; padding: 28px 24px; }
@@ -52,6 +53,16 @@
     .panel p { margin: 0; color: var(--muted); }
     footer { text-align: center; margin-top: 18px; color: var(--muted); }
     @media (min-width: 760px) { .grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px) {
+      .shell { padding: 14px 12px 26px; }
+      header { padding: 14px 16px; align-items: flex-start; flex-direction: column; }
+      nav { width: 100%; justify-content: flex-start; gap: 2px 8px; }
+      nav a { margin-left: 0; display: inline-block; padding: 6px 0; }
+      .hero { padding: 20px 16px; }
+      .hero p { max-width: none; }
+      .panel { padding: 16px; }
+      .cta { width: 100%; text-align: center; }
+    }
   </style>
 </head>
 <body>
